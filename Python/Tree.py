@@ -21,26 +21,29 @@ class Tree:
             if value > current.value:
                 if current.right is not None:
                     current = current.right
-                    print("stepping down one node to:"+str(current.value))
                 else:
                     current.right = new_node
                     break
             else:
                 if current.left is not None:
                     current = current.left
-                    print("stepping down one node to:"+str(current.value))
                 else:
                     current.left = new_node
                     break
 
     def traverse(self):
         parent = self.root
-        print(parent.value)
+        offset = self.find_offset(parent, 0)
+        print("offset:" + str(offset))
+        tab_offset = ""
+        for x in range(0, offset):
+            tab_offset = tab_offset + "\t"
+        print(tab_offset + str(parent.value))
         if parent.left is not None:
-            depth = 1
-            self.subtree(parent.left, depth)
+            depth = offset
+            self.subtree(parent.left, depth-1)
         if parent.right is not None:
-            depth = 1
+            depth = offset
             self.subtree(parent.right, depth)
 
     def subtree(self, current, depth):
@@ -60,7 +63,13 @@ class Tree:
                 self.subtree(current.right, depth + 1)
 
         else:
-            self.subtree(current.left, depth + 1)
+            self.subtree(current.left, depth - 1)
+
+    def find_offset(self, node, offset):
+        while node.left is not None:
+            offset = offset + 1
+            node = node.left
+        return offset
 
 
 def main():
