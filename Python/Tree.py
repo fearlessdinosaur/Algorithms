@@ -9,6 +9,20 @@ class Node:
         self.right = None
 
 
+def build_offset(offset):
+    tab_offset = ""
+    for x in range(0, offset):
+        tab_offset = tab_offset + "\t"
+    return tab_offset
+
+
+def find_offset(node, offset):
+    while node.left is not None:
+        offset = offset + 1
+        node = node.left
+    return offset
+
+
 class Tree:
 
     def __init__(self, root):
@@ -33,26 +47,21 @@ class Tree:
 
     def traverse(self):
         parent = self.root
-        offset = self.find_offset(parent, 0)
+        offset = find_offset(parent, 0)
         print("offset:" + str(offset))
-        tab_offset = ""
-        for x in range(0, offset):
-            tab_offset = tab_offset + "\t"
-        print(tab_offset + str(parent.value))
+        print(build_offset(offset) + str(parent.value))
         if parent.left is not None:
             depth = offset
-            self.subtree(parent.left, depth-1)
+            self.subtree(parent.left, depth - 1)
         if parent.right is not None:
             depth = offset
-            self.subtree(parent.right, depth)
+            self.subtree(parent.right, depth + 1)
 
     def subtree(self, current, depth):
 
         if current is not None:
             tabs = ""
-            for x in range(0, depth):
-                tabs = tabs + "\t"
-            print(tabs + str(current.value))
+            print(build_offset(depth) + str(current.value))
         else:
             print("None")
 
@@ -65,15 +74,9 @@ class Tree:
         else:
             self.subtree(current.left, depth - 1)
 
-    def find_offset(self, node, offset):
-        while node.left is not None:
-            offset = offset + 1
-            node = node.left
-        return offset
-
 
 def main():
-    sample_tree = Tree(5)
+    sample_tree = Tree(random.randint(0, 50))
     for x in range(0, 10):
         sample_tree.append(random.randint(0, 50))
     sample_tree.traverse()
